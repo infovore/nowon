@@ -3,26 +3,41 @@
 require 'nokogiri'
 require 'open-uri'
 
-unless ARGV[0] && %w(radio4 6music).include?(ARGV[0])
-  puts "Usage: nowon [6music|radio4]"
+unless ARGV[0] && %w(radio4 6music all).include?(ARGV[0])
+  puts "Usage: nowon [6music|radio4|all]"
   exit
 end
 
+def nowon(station)
+  case station
+  when '6music'
+    doc = Nokogiri::HTML(open('http://www.bbc.co.uk/6music'))
+
+    artist = doc.css('.realtime-now-playing .rtm-np-artist').text.strip
+    track = doc.css('.realtime-now-playing .rtm-np-track').text.strip
+
+    puts "#{track} - #{artist}"
+  when 'radio4'
+    doc = Nokogiri::HTML(open('http://www.bbc.co.uk/radio4'))
+
+    text1 = doc.css('.t1-live-title .titling-title-inline-1').text.strip
+    text2 = doc.css('.t1-live-title .titling-title-inline-2').text.strip
+    synopsis = doc.css('.t1-live-synopsis').text.strip
+
+    puts "#{text1} #{text2}"
+    puts synopsis
+  end
+end
+
 case ARGV[0]
-when '6music'
-  doc = Nokogiri::HTML(open('http://www.bbc.co.uk/6music'))
-
-  artist = doc.css('.realtime-now-playing .rtm-np-artist').text.strip
-  track = doc.css('.realtime-now-playing .rtm-np-track').text.strip
-
-  puts "#{track} - #{artist}"
-when 'radio4'
-  doc = Nokogiri::HTML(open('http://www.bbc.co.uk/radio4'))
-
-  text1 = doc.css('.t1-live-title .titling-title-inline-1').text.strip
-  text2 = doc.css('.t1-live-title .titling-title-inline-2').text.strip
-  synopsis = doc.css('.t1-live-synopsis').text.strip
-
-  puts "#{text1} #{text2}"
-  puts synopsis
+when 'radio4', '6music'
+  nowon(ARGV[0])
+when 'all'
+  station = 'radio4'
+  puts station
+  nowon(station)
+  puts
+  station = '6music'
+  puts station
+  nowon(station)
 end
