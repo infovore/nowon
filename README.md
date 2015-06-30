@@ -14,8 +14,8 @@ and then you can run it anywhere.
 
 ## Usage
 
-`nowon 6music`  
+	nowon 6music
 
-`nowon radio4`
+	nowon radio4
 
 That's it.
