@@ -15,7 +15,7 @@ when '6music'
   artist = doc.css('.realtime-now-playing .rtm-np-artist').text.strip
   track = doc.css('.realtime-now-playing .rtm-np-track').text.strip
 
-  puts "#{track} - #{artist}"
+  puts "#{artist} - #{track}"
 when 'radio4'
   doc = Nokogiri::HTML(open('http://www.bbc.co.uk/radio4'))
 
