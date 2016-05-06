@@ -4,7 +4,9 @@ require 'nokogiri'
 require 'open-uri'
 require 'json'
 
-unless ARGV[0] && %w(radio4 6music all).include?(ARGV[0])
+stations = %w{radio4 6music}
+
+unless ARGV[0] && ((stations + ['all']).flatten).include?(ARGV[0])
   puts "Usage: nowon [6music|radio4|all]"
   exit
 end
@@ -35,11 +37,9 @@ case ARGV[0]
 when 'radio4', '6music'
   nowon(ARGV[0])
 when 'all'
-  station = 'radio4'
-  puts station
-  nowon(station)
-  puts
-  station = '6music'
-  puts station
-  nowon(station)
+  stations.each do |station|
+    puts "*** #{station}"
+    nowon(station)
+    puts
+  end
 end
