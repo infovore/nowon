@@ -4,7 +4,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'json'
 
-stations = %w{radio4 6music 5live}
+stations = %w{radio2 radio3 radio4 6music 5live}
 
 unless ARGV[0] && ((stations + ['all']).flatten).include?(ARGV[0])
   puts "Usage: nowon [#{stations.join("|")}|all]"
@@ -21,6 +21,10 @@ def nowon(station)
     artist = doc.css('.richtrack__artistname')[0].inner_text.strip
 
     puts "#{artist} - #{track}"
+  when 'radio2'
+    iplayer_radio('http://www.bbc.co.uk/radio2')
+  when 'radio3'
+    iplayer_radio('http://www.bbc.co.uk/radio3')
   when 'radio4'
     iplayer_radio('http://www.bbc.co.uk/radio4')
   when '5live'
@@ -31,9 +35,9 @@ end
 def iplayer_radio(url)
   doc = Nokogiri::HTML(open(url))
 
-  text = doc.css('.on-air-now .on-air__episode-title').text.strip
-  synopsis = doc.css('.on-air-now .on-air__episode-synopsis').text.strip
-  details = doc.css('.on-air-now .on-air__track-now-playing__details').text.strip
+  text = doc.css('.on-air-now .on-air__episode-title').first.text.strip
+  synopsis = doc.css('.on-air-now .on-air__episode-synopsis').first.text.strip
+  details = doc.css('.on-air-now .on-air__track-now-playing__details').first.text.strip
 
   puts "#{text} - #{synopsis}"
   puts details
