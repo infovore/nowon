@@ -24,9 +24,9 @@ def nowon(station)
 
     buffer << "#{artist} - #{track}"
     buffer << iplayer_radio("http://www.bbc.co.uk/#{station}")
-    puts buffer.join("\n")
+    buffer.join("\n")
   when 'radio2', 'radio3', 'radio4', '5live'
-    puts iplayer_radio("http://www.bbc.co.uk/#{station}")
+    iplayer_radio("http://www.bbc.co.uk/#{station}")
   end
 end
 
@@ -42,11 +42,15 @@ end
 
 case ARGV[0]
 when 'all'
+  buffer = []
+  puts "Thinking..."
+  puts "-----------"
   stations.each do |station|
-    puts "*** #{station}"
-    nowon(station)
-    puts
+    buffer << "*** #{station}"
+    buffer << nowon(station)
+    buffer << ""
   end
+  puts buffer.join("\n")
 else 
-  nowon(ARGV[0])
+  puts nowon(ARGV[0])
 end
