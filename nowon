@@ -15,8 +15,8 @@ def nowon(station)
     json = JSON.load(open('http://polling.bbc.co.uk/6music/richtracks.json'))
     doc = Nokogiri::HTML(json['body'])
 
-    artist = doc.css('.richtrack__trackname')[0].inner_text.strip
-    track = doc.css('.richtrack__artistname')[0].inner_text.strip
+    track = doc.css('.richtrack__trackname')[0].inner_text.strip
+    artist = doc.css('.richtrack__artistname')[0].inner_text.strip
 
     puts "#{artist} - #{track}"
   when 'radio4'
