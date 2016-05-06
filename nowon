@@ -22,12 +22,12 @@ def nowon(station)
   when 'radio4'
     doc = Nokogiri::HTML(open('http://www.bbc.co.uk/radio4'))
 
-    text1 = doc.css('.t1-live-title .titling-title-inline-1').text.strip
-    text2 = doc.css('.t1-live-title .titling-title-inline-2').text.strip
-    synopsis = doc.css('.t1-live-synopsis').text.strip
+    text = doc.css('.on-air-now .on-air__episode-title').text.strip
+    synopsis = doc.css('.on-air-now .on-air__episode-synopsis').text.strip
+    details = doc.css('.on-air-now .on-air__track-now-playing__details').text.strip
 
-    puts "#{text1} #{text2}"
-    puts synopsis
+    puts "#{text} - #{synopsis}"
+    puts details
   end
 end
 
