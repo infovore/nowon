@@ -14,8 +14,8 @@ and then you can run it anywhere.
 
 ## Usage
 
-	nowon 6music
+	nowon [station]
 
-	nowon radio4
+	nowon all
 
-That's it.
+That's it. `nowon` on its own will list the stations it supports.
