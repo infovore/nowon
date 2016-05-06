@@ -4,10 +4,10 @@ require 'nokogiri'
 require 'open-uri'
 require 'json'
 
-stations = %w{radio4 6music}
+stations = %w{radio4 6music 5live}
 
 unless ARGV[0] && ((stations + ['all']).flatten).include?(ARGV[0])
-  puts "Usage: nowon [6music|radio4|all]"
+  puts "Usage: nowon [#{stations.join("|")}|all]"
   exit
 end
 
@@ -22,24 +22,30 @@ def nowon(station)
 
     puts "#{artist} - #{track}"
   when 'radio4'
-    doc = Nokogiri::HTML(open('http://www.bbc.co.uk/radio4'))
-
-    text = doc.css('.on-air-now .on-air__episode-title').text.strip
-    synopsis = doc.css('.on-air-now .on-air__episode-synopsis').text.strip
-    details = doc.css('.on-air-now .on-air__track-now-playing__details').text.strip
-
-    puts "#{text} - #{synopsis}"
-    puts details
+    iplayer_radio('http://www.bbc.co.uk/radio4')
+  when '5live'
+    iplayer_radio('http://www.bbc.co.uk/5live')
   end
 end
 
+def iplayer_radio(url)
+  doc = Nokogiri::HTML(open(url))
+
+  text = doc.css('.on-air-now .on-air__episode-title').text.strip
+  synopsis = doc.css('.on-air-now .on-air__episode-synopsis').text.strip
+  details = doc.css('.on-air-now .on-air__track-now-playing__details').text.strip
+
+  puts "#{text} - #{synopsis}"
+  puts details
+end
+
 case ARGV[0]
-when 'radio4', '6music'
-  nowon(ARGV[0])
 when 'all'
   stations.each do |station|
     puts "*** #{station}"
     nowon(station)
     puts
   end
+else 
+  nowon(ARGV[0])
 end
