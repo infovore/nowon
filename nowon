@@ -4,7 +4,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'json'
 
-stations = %w{radio2 radio3 radio4 6music 5live}
+stations = %w{radio1 radio2 radio3 radio4 5live 6music}
 
 unless ARGV[0] && ((stations + ['all']).flatten).include?(ARGV[0])
   puts "Usage: nowon [#{stations.join("|")}|all]"
@@ -13,22 +13,20 @@ end
 
 def nowon(station)
   case station
-  when '6music'
-    json = JSON.load(open('http://polling.bbc.co.uk/6music/richtracks.json'))
+  when '6music', 'radio1'
+    json = JSON.load(open("http://polling.bbc.co.uk/#{station}/richtracks.json"))
     doc = Nokogiri::HTML(json['body'])
 
     track = doc.css('.richtrack__trackname')[0].inner_text.strip
     artist = doc.css('.richtrack__artistname')[0].inner_text.strip
 
-    puts "#{artist} - #{track}"
-  when 'radio2'
-    iplayer_radio('http://www.bbc.co.uk/radio2')
-  when 'radio3'
-    iplayer_radio('http://www.bbc.co.uk/radio3')
-  when 'radio4'
-    iplayer_radio('http://www.bbc.co.uk/radio4')
-  when '5live'
-    iplayer_radio('http://www.bbc.co.uk/5live')
+    buffer = []
+
+    buffer << "#{artist} - #{track}"
+    buffer << iplayer_radio("http://www.bbc.co.uk/#{station}")
+    puts buffer.join("\n")
+  when 'radio2', 'radio3', 'radio4', '5live'
+    puts iplayer_radio("http://www.bbc.co.uk/#{station}")
   end
 end
 
@@ -39,8 +37,7 @@ def iplayer_radio(url)
   synopsis = doc.css('.on-air-now .on-air__episode-synopsis').first.text.strip
   details = doc.css('.on-air-now .on-air__track-now-playing__details').first.text.strip
 
-  puts "#{text} - #{synopsis}"
-  puts details
+  "#{text} - #{synopsis}\n#{details}"
 end
 
 case ARGV[0]
