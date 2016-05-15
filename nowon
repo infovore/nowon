@@ -4,7 +4,7 @@ require 'nokogiri'
 require 'open-uri'
 require 'json'
 
-stations = %w{radio1 radio2 radio3 radio4 5live 6music}
+stations = %w{radio1 radio2 radio3 radio4 radio4extra 5live 6music}
 
 unless ARGV[0] && ((stations + ['all']).flatten).include?(ARGV[0])
   puts "Usage: nowon [#{stations.join("|")}|all]"
@@ -25,7 +25,7 @@ def nowon(station)
     buffer << "#{artist} - #{track}"
     buffer << iplayer_radio("http://www.bbc.co.uk/#{station}")
     buffer.join("\n")
-  when 'radio2', 'radio3', 'radio4', '5live'
+  when 'radio2', 'radio3', 'radio4', 'radio4extra', '5live'
     iplayer_radio("http://www.bbc.co.uk/#{station}")
   end
 end
