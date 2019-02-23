@@ -29,10 +29,10 @@ def nowon(station)
     buffer = []
 
     buffer << "#{artist} - #{track}"
-    buffer << iplayer_radio("http://www.bbc.co.uk/#{station}")
+    buffer << iplayer_radio("https://www.bbc.co.uk/#{station}")
     buffer.join("\n")
   when 'radio2', 'radio3', 'radio4', '5live'
-    iplayer_radio("http://www.bbc.co.uk/#{station}")
+    iplayer_radio("https://www.bbc.co.uk/#{station}")
   end
 end
 
