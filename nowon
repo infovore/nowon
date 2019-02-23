@@ -14,11 +14,17 @@ end
 def nowon(station)
   case station
   when '6music', 'radio1'
-    json = JSON.load(open("http://polling.bbc.co.uk/#{station}/richtracks.json"))
-    doc = Nokogiri::HTML(json['body'])
+    station == 'radio1' ? station2 = 'radio_one' : station2 = station
+    jsonp = open("https://polling.bbc.co.uk/radio/realtime/bbc_#{station2}.jsonp").read
 
-    track = doc.css('.richtrack__trackname')[0].inner_text.strip
-    artist = doc.css('.richtrack__artistname')[0].inner_text.strip
+    # Remove the callback function from the start of the string
+    jsonp.gsub!(/realtimeCallback\(/, '')
+    # Remove the end of the callback function
+    jsonp.gsub!(/\)$/, '')
+
+    json = JSON.load(jsonp)
+    track = json['realtime']['title'].strip
+    artist = json['realtime']['artist'].strip
 
     buffer = []
 
